@@ -4,8 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-// import './assets/styles/preflight.css'
-// import './assets/styles/tailwind.css'
+import './assets/styles/tailwind.css'
 import 'vfonts/Lato.css'
 import {
     create,
