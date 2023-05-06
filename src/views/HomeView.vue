@@ -18,7 +18,13 @@
       Warning
     </n-button>
     <n-button type="error">
-      Error
+      {{ title }}
     </n-button>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const title = ref('Error')
+</script>
