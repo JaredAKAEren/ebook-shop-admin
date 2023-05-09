@@ -9,14 +9,16 @@ const routes: RouteRecordRaw = {
     component: Layout,
     redirect: '/dashboard/console',
     meta: {
-        title: 'Dashboard'
+        title: 'Dashboard',
+        requireAuth: true
     },
     children: [
         {
             path: 'console',
             name: 'dashboard_console',
             meta: {
-                title: '主控台'
+                title: '主控台',
+                requireAuth: true
             },
             component: Dashboard
         }
