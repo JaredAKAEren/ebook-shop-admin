@@ -1,6 +1,6 @@
-import type { RouteRecordRaw } from "vue-router"
+import type { RouteRecordRaw } from 'vue-router'
 
-import Layout from "@/layout/index.vue"
+import Layout from '@/layout/index.vue'
 import Dashboard from '@/views/dashboard/index.vue'
 
 const routes: RouteRecordRaw = {
