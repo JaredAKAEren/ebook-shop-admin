@@ -10,10 +10,7 @@ routeModuleList.push(dashboardRoutes)
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
-        redirect: '/dashboard/console',
-        meta: {
-            requireAuth: true
-        }
+        redirect: '/dashboard/console'
     },
     {
         path: '/login',
@@ -23,7 +20,6 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const baseRoutes = [...routes, ...routeModuleList]
-console.log(import.meta.env.BASE_URL)
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
