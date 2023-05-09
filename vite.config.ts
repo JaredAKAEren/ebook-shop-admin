@@ -13,5 +13,8 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  base: "/ebook-shop-admin/"
+  base: "/ebook-shop-admin/",
+  build: {
+    outDir: "docs"
+  }
 })
