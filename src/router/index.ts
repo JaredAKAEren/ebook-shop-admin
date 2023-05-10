@@ -3,9 +3,10 @@ import type { RouteRecordRaw } from 'vue-router'
 import LoginView from '../views/login/index.vue'
 
 import dashboardRoutes from './modules/dashboard'
+import accountRoutes from './modules/accounts'
 
 const routeModuleList: RouteRecordRaw[] = []
-routeModuleList.push(dashboardRoutes)
+routeModuleList.push(dashboardRoutes, accountRoutes)
 
 const routes: RouteRecordRaw[] = [
     {
@@ -40,4 +41,5 @@ router.beforeEach((to) => {
     // document.title = `ebook 图书 - ${to.meta.title}`
 })
 
+export { routeModuleList }
 export default router

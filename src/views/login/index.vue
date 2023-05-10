@@ -27,7 +27,7 @@
                             clearable
                         />
                     </NFormItem>
-                    <NButton class="my-4" @click="toLogin" block type="info">
+                    <NButton class="my-4" @click="toLogin" :loading="loading" block type="info">
                         <span class="tracking-widest">登录</span>
                     </NButton>
                 </NForm>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { login } from '@/api/auth'
+import { getNowUserInfo, login } from '@/api/auth'
 import { useUserStore } from '@/stores/user'
 import type { FormInst, FormRules } from 'naive-ui'
 import { ref } from 'vue'
@@ -53,11 +53,9 @@ interface loginType {
 }
 
 // 表单元素的引用
+const loading = ref<boolean>(false)
 const formRef = ref<FormInst | null>(null)
-const loginInfo = ref<loginType>({
-    email: 'super@a.com',
-    password: '123123'
-})
+const loginInfo = ref<loginType>({ email: 'super@a.com', password: '123123' })
 
 const rules: FormRules = {
     email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
@@ -70,13 +68,27 @@ async function toLogin() {
             return
         }
     })
+
+    loading.value = true
     const res = await login(loginInfo.value)
+    loading.value = false
+
     if (res.data) {
         userStore.setToken(res.data.access_token)
+        fetchUserInfo()
         let path: string = route.query.redirect as string
         router.replace({
             path: path === '/' || path === undefined || path === null ? '/dashboard/console' : path
         })
+    }
+}
+
+async function fetchUserInfo() {
+    const res = await getNowUserInfo()
+    if (res.data) {
+        userStore.setUsername(res.data.name)
+        userStore.setAavatar(res.data.avatar_url)
+        userStore.setUserInfo(res.data)
     }
 }
 </script>
