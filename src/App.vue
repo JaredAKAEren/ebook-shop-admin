@@ -1,12 +1,16 @@
 <template>
-    <n-config-provider
+    <NConfigProvider
         class="h-full"
         :theme-overrides="{ common: { fontWeightStrong: '600' } }"
         :locale="zhCN"
         :date-locale="dateZhCN"
     >
-        <RouterView />
-    </n-config-provider>
+        <NDialogProvider>
+            <NMessageProvider>
+                <RouterView />
+            </NMessageProvider>
+        </NDialogProvider>
+    </NConfigProvider>
 </template>
 
 <script setup lang="ts">

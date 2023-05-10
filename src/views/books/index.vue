@@ -1,5 +1,5 @@
 <template>
     <div>
-        <h1>账户管理</h1>
+        <h1>图书管理</h1>
     </div>
 </template>

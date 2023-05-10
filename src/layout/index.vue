@@ -1,6 +1,19 @@
 <template>
     <NLayout position="absolute" has-sider>
-        <NLayoutSider collapse-mode="width" show-trigger :bordered="true">
+        <NLayoutSider
+            show-trigger
+            collapse-mode="width"
+            :collapsed="collapsed"
+            @collapse="collapsed = true"
+            @expand="collapsed = false"
+            :bordered="true"
+        >
+            <header class="h-20 flex justify-center items-center">
+                <div class="flex" v-show="!collapsed">
+                    <img class="w-11 -mt-1" src="../assets/icon/book-icon.svg" alt="eBook" />
+                    <h2 class="font-bold text-4xl ml-2 tracking-wide">eBook</h2>
+                </div>
+            </header>
             <SideNav></SideNav>
         </NLayoutSider>
         <NLayout>
@@ -21,4 +34,8 @@
 import HeaderBar from './componets/HeaderBar.vue'
 import FooterBar from './componets/FooterBar.vue'
 import SideNav from './componets/SideNav.vue'
+
+import { ref } from 'vue'
+
+const collapsed = ref(false)
 </script>

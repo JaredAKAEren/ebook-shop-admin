@@ -4,9 +4,24 @@ import LoginView from '../views/login/index.vue'
 
 import dashboardRoutes from './modules/dashboard'
 import accountRoutes from './modules/accounts'
+import categoryRoutes from './modules/categories'
+import bookRoutes from './modules/books'
+import orderRoutes from './modules/orders'
+import commentRoutes from './modules/comments'
+import carouselRoutes from './modules/carousels'
+import linkRoutes from './modules/links'
 
 const routeModuleList: RouteRecordRaw[] = []
-routeModuleList.push(dashboardRoutes, accountRoutes)
+routeModuleList.push(
+    dashboardRoutes,
+    accountRoutes,
+    categoryRoutes,
+    bookRoutes,
+    orderRoutes,
+    commentRoutes,
+    carouselRoutes,
+    linkRoutes
+)
 
 const routes: RouteRecordRaw[] = [
     {
@@ -38,7 +53,7 @@ router.beforeEach((to) => {
             }
         }
     }
-    // document.title = `ebook 图书 - ${to.meta.title}`
+    document.title = `ebook - ${to.meta.title}`
 })
 
 export { routeModuleList }

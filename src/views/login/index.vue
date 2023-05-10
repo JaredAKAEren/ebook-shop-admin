@@ -15,6 +15,7 @@
                         <NInput
                             v-model:value="loginInfo.email"
                             placeholder="请输入邮箱 eg: super@a.com"
+                            :theme-overrides="inputThemeOverrides"
                             clearable
                         />
                     </NFormItem>
@@ -22,6 +23,7 @@
                         <NInput
                             v-model:value="loginInfo.password"
                             placeholder="请输入密码 eg: 123123"
+                            :theme-overrides="inputThemeOverrides"
                             type="password"
                             show-password-on="mousedown"
                             clearable
@@ -37,9 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import { getNowUserInfo, login } from '@/api/auth'
+import { login } from '@/api/auth'
 import { useUserStore } from '@/stores/user'
-import type { FormInst, FormRules } from 'naive-ui'
+import type { FormInst, FormRules, InputProps } from 'naive-ui'
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -50,6 +52,12 @@ const route = useRoute()
 interface loginType {
     email: string
     password: string
+}
+
+type InputThemeOverrides = NonNullable<InputProps['themeOverrides']>
+const inputThemeOverrides: InputThemeOverrides = {
+    borderHover: '1px solid #2080f0',
+    borderFocus: '1px solid #2080f0'
 }
 
 // 表单元素的引用
@@ -75,20 +83,10 @@ async function toLogin() {
 
     if (res.data) {
         userStore.setToken(res.data.access_token)
-        fetchUserInfo()
         let path: string = route.query.redirect as string
         router.replace({
             path: path === '/' || path === undefined || path === null ? '/dashboard/console' : path
         })
-    }
-}
-
-async function fetchUserInfo() {
-    const res = await getNowUserInfo()
-    if (res.data) {
-        userStore.setUsername(res.data.name)
-        userStore.setAavatar(res.data.avatar_url)
-        userStore.setUserInfo(res.data)
     }
 }
 </script>

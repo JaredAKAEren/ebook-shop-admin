@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed } from 'vue'
 import { ref } from 'vue'
+import { getNowUserInfo } from '@/api/auth'
 
 export const useUserStore = defineStore('user', () => {
     const token = ref(localStorage.getItem('token') || '')
@@ -27,6 +28,16 @@ export const useUserStore = defineStore('user', () => {
         userInfo.value = userinfoVal
     }
 
+    async function fetchUserInfo() {
+        if (!userInfo.value) return
+        const res = await getNowUserInfo()
+        if (res.data) {
+            setUsername(res.data.name)
+            setAavatar(res.data.avatar_url)
+            setUserInfo(res.data)
+        }
+    }
+
     return {
         token,
         username,
@@ -39,6 +50,7 @@ export const useUserStore = defineStore('user', () => {
         setToken,
         setUsername,
         setAavatar,
-        setUserInfo
+        setUserInfo,
+        fetchUserInfo
     }
 })

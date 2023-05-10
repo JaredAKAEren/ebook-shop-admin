@@ -1,8 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
-import { HomeRound } from '@vicons/material'
-
-import Layout from '@/layout/index.vue'
-import Dashboard from '@/views/dashboard/index.vue'
+import { DashboardRound } from '@vicons/material'
 
 const routes: RouteRecordRaw = {
     path: '/dashboard',
@@ -10,10 +7,10 @@ const routes: RouteRecordRaw = {
     redirect: '/dashboard/console',
     meta: {
         title: '首页统计',
-        icon: HomeRound,
+        icon: DashboardRound,
         requireAuth: true
     },
-    component: Layout,
+    component: () => import('@/layout/index.vue'),
     children: [
         {
             path: 'console',
@@ -22,7 +19,7 @@ const routes: RouteRecordRaw = {
                 title: '首页统计',
                 requireAuth: true
             },
-            component: Dashboard
+            component: () => import('@/views/dashboard/index.vue')
         }
     ]
 }

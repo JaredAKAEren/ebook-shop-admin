@@ -1,16 +1,44 @@
 <template>
-    <header class="h-12 flex items-center">
-        头部，放一些用户数据
-        <button type="button" @click="toLogout">登出</button>
+    <header class="h-12 flex items-center justify-end">
+        <NAvatar class="mr-4" round>
+            {{ userStore.getUsername }}
+        </NAvatar>
+        <NButton class="mr-8" strong secondary round type="error" @click="toLogout">登出</NButton>
     </header>
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user'
+import { useDialog, useMessage } from 'naive-ui'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-async function toLogout() {
+const userStore = useUserStore()
+const dialog = useDialog()
+const message = useMessage()
+
+onMounted(() => {
+    userStore.fetchUserInfo()
+})
+
+function toLogout() {
+    dialog.warning({
+        title: '警告',
+        content: '你确定要退出登录吗？',
+        positiveText: '确定',
+        negativeText: '不确定',
+        maskClosable: false,
+        transformOrigin: 'center',
+        onPositiveClick: () => {
+            logout()
+        }
+    })
+}
+
+function logout() {
     localStorage.removeItem('token')
     router.push('/login')
+    message.success('已退出登录')
 }
 </script>
