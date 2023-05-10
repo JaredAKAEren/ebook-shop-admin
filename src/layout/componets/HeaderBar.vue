@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
-import { useDialog, useMessage } from 'naive-ui'
+import { useDialog, useMessage, type ButtonProps } from 'naive-ui'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -25,11 +25,14 @@ onMounted(() => {
 function toLogout() {
     dialog.warning({
         title: '警告',
-        content: '你确定要退出登录吗？',
+        content: '你确定要登出吗？',
         positiveText: '确定',
-        negativeText: '不确定',
+        negativeText: '取消',
         maskClosable: false,
         transformOrigin: 'center',
+        showIcon: false,
+        negativeButtonProps: { type: 'info' },
+        positiveButtonProps: { type: 'info' },
         onPositiveClick: () => {
             logout()
         }

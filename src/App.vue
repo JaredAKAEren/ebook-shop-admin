@@ -1,10 +1,5 @@
 <template>
-    <NConfigProvider
-        class="h-full"
-        :theme-overrides="{ common: { fontWeightStrong: '600' } }"
-        :locale="zhCN"
-        :date-locale="dateZhCN"
-    >
+    <NConfigProvider class="h-full" :locale="zhCN" :date-locale="dateZhCN">
         <NDialogProvider>
             <NMessageProvider>
                 <RouterView />
