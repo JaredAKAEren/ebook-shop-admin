@@ -23,6 +23,18 @@ instance.interceptors.response.use(
         return res
     },
     (err) => {
+        const { response } = err
+        switch (response?.status) {
+            case 401:
+                window.$message.error('登录失败，请检查用户名和密码是否正确')
+                break
+            case 404:
+                break
+            case 422:
+                break
+            default:
+                break
+        }
         return Promise.reject(err)
     }
 )
