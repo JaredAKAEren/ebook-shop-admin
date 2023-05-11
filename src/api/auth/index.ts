@@ -1,5 +1,9 @@
 import http from '../index'
-import type { LoginParams } from './interface'
+
+export interface LoginParams {
+    email: string
+    password: string
+}
 
 export function login(data: LoginParams) {
     return http.post('/auth/login', data)

@@ -39,19 +39,24 @@
 </template>
 
 <script setup lang="ts">
-import { login } from '@/api/auth'
+import { login, type LoginParams } from '@/api/auth'
 import { useUserStore } from '@/stores/user'
-import type { FormInst, FormRules, InputProps } from 'naive-ui'
+import { useMessage, type FormInst, type FormRules, type InputProps } from 'naive-ui'
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
+const message = useMessage()
 
-interface loginType {
-    email: string
-    password: string
+declare global {
+    interface Window {
+        $message: any
+    }
+}
+if (window.$message === undefined) {
+    window.$message = useMessage()
 }
 
 type InputThemeOverrides = NonNullable<InputProps['themeOverrides']>
@@ -63,7 +68,7 @@ const inputThemeOverrides: InputThemeOverrides = {
 // 表单元素的引用
 const loading = ref<boolean>(false)
 const formRef = ref<FormInst | null>(null)
-const loginInfo = ref<loginType>({ email: 'super@a.com', password: '123123' })
+const loginInfo = ref<LoginParams>({ email: 'super@a.com', password: '123123' })
 
 const rules: FormRules = {
     email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
@@ -72,21 +77,27 @@ const rules: FormRules = {
 
 async function toLogin() {
     formRef.value?.validate((error) => {
-        if (error) {
-            return
-        }
+        if (error) return
     })
 
-    loading.value = true
-    const res = await login(loginInfo.value)
-    loading.value = false
+    try {
+        loading.value = true
+        const res = await login(loginInfo.value)
+        loading.value = false
 
-    if (res.data) {
-        userStore.setToken(res.data.access_token)
-        let path: string = route.query.redirect as string
-        router.replace({
-            path: path === '/' || path === undefined || path === null ? '/dashboard/console' : path
-        })
+        if (res.data) {
+            userStore.setToken(res.data.access_token)
+            let path: string = route.query.redirect as string
+            router.replace({
+                path:
+                    path === '/' || path === undefined || path === null
+                        ? '/dashboard/console'
+                        : path
+            })
+            message.success('登录成功')
+        }
+    } catch (error) {
+        loading.value = false
     }
 }
 </script>

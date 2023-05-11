@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
-import { useDialog, useMessage, type ButtonProps } from 'naive-ui'
+import { useDialog, useMessage } from 'naive-ui'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -31,6 +31,7 @@ function toLogout() {
         maskClosable: false,
         transformOrigin: 'center',
         showIcon: false,
+        closeOnEsc: false,
         negativeButtonProps: { type: 'info' },
         positiveButtonProps: { type: 'info' },
         onPositiveClick: () => {

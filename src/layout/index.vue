@@ -36,6 +36,11 @@ import FooterBar from './componets/FooterBar.vue'
 import SideNav from './componets/SideNav.vue'
 
 import { ref } from 'vue'
+import { useMessage } from 'naive-ui'
 
 const collapsed = ref(false)
+
+if (window.$message === undefined) {
+    window.$message = useMessage()
+}
 </script>
