@@ -62,7 +62,8 @@ if (window.$message === undefined) {
 type InputThemeOverrides = NonNullable<InputProps['themeOverrides']>
 const inputThemeOverrides: InputThemeOverrides = {
     borderHover: '1px solid #2080f0',
-    borderFocus: '1px solid #2080f0'
+    borderFocus: '1px solid #2080f0',
+    boxShadowFocus: '0 0 0 2px #2080f033'
 }
 
 // 表单元素的引用

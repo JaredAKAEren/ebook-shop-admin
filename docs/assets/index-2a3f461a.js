@@ -1,0 +1,1 @@
+import{aj as s,aa as c,ab as a,P as n,ao as e}from"./index-3dcad9e9.js";const t={},o=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1),r=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1),_=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1);function d(i,l){return c(),a(n,null,[o,r,_],64)}const f=s(t,[["render",d]]);export{f as default};
