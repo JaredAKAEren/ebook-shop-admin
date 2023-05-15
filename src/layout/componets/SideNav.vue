@@ -3,27 +3,17 @@
         :options="menuOptions"
         :value="activeMenu"
         @update:value="handleMenuChange"
-        :theme-overrides="menuThemeOverrides"
+        :theme-overrides="menuOverrides"
     ></NMenu>
 </template>
 
 <script setup lang="ts">
 import { routeModuleList } from '@/router/index'
-import { NIcon, type MenuOption, type MenuProps } from 'naive-ui'
+import { menuOverrides } from '@/utils/themeOverrides'
+import { NIcon, type MenuOption } from 'naive-ui'
 import { onMounted, type Component } from 'vue'
 import { h, ref } from 'vue'
 import { RouterLink, type RouteRecordRaw, useRoute } from 'vue-router'
-
-type MenuThemeOverrides = NonNullable<MenuProps['themeOverrides']>
-const menuThemeOverrides: MenuThemeOverrides = {
-    itemTextColorActive: '#2080f0',
-    itemTextColorActiveHover: '#2080f0',
-    itemIconColorActive: '#2080f0',
-    itemIconColorActiveHover: '#2080f0',
-    itemColorActive: '#2080f020',
-    itemColorActiveHover: '#2080f020',
-    itemColorActiveCollapsed: '#2080f020'
-}
 
 const route = useRoute()
 const menuOptions = ref<MenuOption[]>()

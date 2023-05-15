@@ -15,7 +15,7 @@
                         <NInput
                             v-model:value="loginInfo.email"
                             placeholder="请输入邮箱 eg: super@a.com"
-                            :theme-overrides="inputThemeOverrides"
+                            :theme-overrides="inputOverrides"
                             clearable
                         />
                     </NFormItem>
@@ -23,7 +23,7 @@
                         <NInput
                             v-model:value="loginInfo.password"
                             placeholder="请输入密码 eg: 123123"
-                            :theme-overrides="inputThemeOverrides"
+                            :theme-overrides="inputOverrides"
                             type="password"
                             show-password-on="mousedown"
                             clearable
@@ -40,8 +40,9 @@
 
 <script setup lang="ts">
 import { login, type LoginParams } from '@/api/auth'
+import { inputOverrides } from '@/utils/themeOverrides'
 import { useUserStore } from '@/stores/user'
-import { useMessage, type FormInst, type FormRules, type InputProps } from 'naive-ui'
+import { useMessage, type FormInst, type FormRules } from 'naive-ui'
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -57,13 +58,6 @@ declare global {
 }
 if (window.$message === undefined) {
     window.$message = useMessage()
-}
-
-type InputThemeOverrides = NonNullable<InputProps['themeOverrides']>
-const inputThemeOverrides: InputThemeOverrides = {
-    borderHover: '1px solid #2080f0',
-    borderFocus: '1px solid #2080f0',
-    boxShadowFocus: '0 0 0 2px #2080f033'
 }
 
 // 表单元素的引用
