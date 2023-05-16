@@ -13,47 +13,47 @@ import linkRoutes from './modules/links'
 
 const routeModuleList: RouteRecordRaw[] = []
 routeModuleList.push(
-    dashboardRoutes,
-    accountRoutes,
-    categoryRoutes,
-    bookRoutes,
-    orderRoutes,
-    commentRoutes,
-    carouselRoutes,
-    linkRoutes
+  dashboardRoutes,
+  accountRoutes,
+  categoryRoutes,
+  bookRoutes,
+  orderRoutes,
+  commentRoutes,
+  carouselRoutes,
+  linkRoutes
 )
 
 const routes: RouteRecordRaw[] = [
-    {
-        path: '/',
-        redirect: '/dashboard/console'
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: LoginView
-    }
+  {
+    path: '/',
+    redirect: '/dashboard/console'
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  }
 ]
 
 const baseRoutes = [...routes, ...routeModuleList]
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes: baseRoutes
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: baseRoutes
 })
 
 router.beforeEach((to) => {
-    if (to.meta.requireAuth) {
-        if (!localStorage.getItem('token')) {
-            return {
-                path: '/login',
-                query: {
-                    redirect: to.fullPath
-                }
-            }
+  if (to.meta.requireAuth) {
+    if (!localStorage.getItem('token')) {
+      return {
+        path: '/login',
+        query: {
+          redirect: to.fullPath
         }
+      }
     }
-    document.title = `ebook - ${to.meta.title}`
+  }
+  document.title = `ebook - ${to.meta.title}`
 })
 
 export { routeModuleList }

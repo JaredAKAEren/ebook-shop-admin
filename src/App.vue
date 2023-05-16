@@ -1,11 +1,11 @@
 <template>
-    <NConfigProvider class="h-full" :locale="zhCN" :date-locale="dateZhCN">
-        <NDialogProvider>
-            <NMessageProvider>
-                <RouterView />
-            </NMessageProvider>
-        </NDialogProvider>
-    </NConfigProvider>
+  <NConfigProvider class="h-full" :locale="zhCN" :date-locale="dateZhCN">
+    <NDialogProvider>
+      <NMessageProvider>
+        <RouterView />
+      </NMessageProvider>
+    </NDialogProvider>
+  </NConfigProvider>
 </template>
 
 <script setup lang="ts">

@@ -1,18 +1,18 @@
 import http from '../index'
 
 export interface LoginParams {
-    email: string
-    password: string
+  email: string
+  password: string
 }
 
 export function login(data: LoginParams) {
-    return http.post('/auth/login', data)
+  return http.post('/auth/login', data)
 }
 
 export function getNowUserInfo() {
-    return http.get('/admin/user')
+  return http.get('/admin/user')
 }
 
 export function logout() {
-    return http.post('/auth/logout')
+  return http.post('/auth/logout')
 }
