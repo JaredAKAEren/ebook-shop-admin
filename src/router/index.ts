@@ -52,6 +52,10 @@ router.beforeEach((to) => {
         }
       }
     }
+  } else if (to.name === 'login') {
+    if (localStorage.getItem('token')) {
+      return { path: '/dashboard/console' }
+    }
   }
   document.title = `ebook - ${to.meta.title}`
 })

@@ -49,19 +49,14 @@ const router = useRouter()
 const route = useRoute()
 const message = useMessage()
 
-declare global {
-  interface Window {
-    $message: any
-  }
-}
 if (window.$message === undefined) {
   window.$message = useMessage()
 }
 
 // 表单元素的引用
-const loading = ref<boolean>(false)
 const formRef = ref<FormInst | null>(null)
 const loginInfo = ref<LoginParams>({ email: 'super@a.com', password: '123123' })
+const loading = ref<boolean>(false)
 
 const rules: FormRules = {
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
@@ -69,7 +64,7 @@ const rules: FormRules = {
 }
 
 async function toLogin() {
-  formRef.value?.validate((error) => {
+  await formRef.value?.validate((error) => {
     if (error) return
   })
 

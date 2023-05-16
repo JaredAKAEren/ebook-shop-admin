@@ -30,14 +30,14 @@
 </template>
 
 <script setup lang="ts">
-import HeaderBar from './componets/HeaderBar.vue'
-import FooterBar from './componets/FooterBar.vue'
-import SideNav from './componets/SideNav.vue'
+import HeaderBar from './components/HeaderBar.vue'
+import FooterBar from './components/FooterBar.vue'
+import SideNav from './components/SideNav.vue'
 
 import { ref } from 'vue'
 import { useMessage } from 'naive-ui'
 
-const collapsed = ref(false)
+const collapsed = ref(true)
 
 if (window.$message === undefined) {
   window.$message = useMessage()

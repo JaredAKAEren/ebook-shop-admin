@@ -2,19 +2,22 @@
   <main class="p-2 bg-gray-100 h-full flex flex-col">
     <HeaderNav title="用户管理"></HeaderNav>
     <div class="bg-white p-2 mt-2 rounded flex flex-col flex-1">
+      <!-- 头部功能区域 -->
       <header class="flex justify-between px-4">
         <NForm inline :show-feedback="false" label-placement="left">
           <NFormItem label="姓名">
             <NInput
               v-model:value="nameQuery"
               :theme-overrides="inputOverrides"
-              placeholder="请输入姓名"></NInput>
+              placeholder="请输入姓名"
+              clearable></NInput>
           </NFormItem>
           <NFormItem label="邮箱">
             <NInput
               v-model:value="emailQuery"
               :theme-overrides="inputOverrides"
-              placeholder="请输入完整邮箱"></NInput>
+              placeholder="请输入完整邮箱"
+              clearable></NInput>
           </NFormItem>
         </NForm>
         <div class="flex">
@@ -25,46 +28,59 @@
         </div>
       </header>
       <NDivider style="margin: 0.875rem 0"></NDivider>
-      <header class="flex justify-between items-center mb-2 px-4">
-        <h3 class="text-xl">用户列表</h3>
-        <NButton type="info" :render-icon="renderIcon(PlusOutlined)">新建</NButton>
-      </header>
-      <div class="flex-1">
-        <NDataTable
-          class="h-full"
-          :columns="columns"
-          :data="accountList"
-          :loading="loading"
-          flex-height></NDataTable>
+      <!-- 表格区域 -->
+      <div class="flex flex-col flex-1">
+        <header class="flex justify-between items-center mb-2 px-4">
+          <h3 class="text-xl">用户列表</h3>
+          <NButton type="info" :render-icon="renderIcon(PlusOutlined)" @click="handleOnCreate">
+            新建
+          </NButton>
+        </header>
+        <div class="flex-1">
+          <NDataTable
+            class="h-full"
+            :columns="columns"
+            :data="accountList"
+            :loading="loading"
+            flex-height></NDataTable>
+        </div>
+        <NPagination
+          class="mt-2 justify-center"
+          v-model:page="page"
+          @update:page="handlePageChange"
+          :page-count="totalPage"
+          :theme-overrides="pageOverrides"></NPagination>
       </div>
-      <NPagination
-        class="mt-2 justify-center"
-        v-model:page="page"
-        @update:page="handlePageChange"
-        :page-count="totalPage"
-        :theme-overrides="pageOverrides"></NPagination>
     </div>
+    <CreateAccount
+      v-model:show="showCreateModal"
+      @reload-account-list="loadAccountList"></CreateAccount>
   </main>
 </template>
 
 <script setup lang="ts">
 import HeaderNav from '@/components/HeaderNav/index.vue'
+import CreateAccount from './components/CreateAccount.vue'
 import { inputOverrides, buttonOverrides, pageOverrides } from '@/utils/themeOverrides'
-import { getAccounts, type AccPrarms } from '@/api/accounts'
-import { NAvatar, NButton, NIcon, NSwitch, type DataTableColumns } from 'naive-ui'
+import { getAccounts, type AccPrarms, updateAccountStatus } from '@/api/accounts'
+import { NAvatar, NButton, NIcon, NSwitch, type DataTableColumns, useMessage } from 'naive-ui'
 import { PlusOutlined } from '@vicons/material'
 import { ref, h, type Component, onMounted } from 'vue'
+
+const message = useMessage()
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 const page = ref(1)
-const totalPage = ref(10)
+const totalPage = ref(1)
 const loading = ref(false)
+const showCreateModal = ref(false)
 const nameQuery = ref('')
 const emailQuery = ref('')
-const accountList = ref([])
+const accountList = ref<account[]>([])
 type account = {
+  id: number
   avatar_url: string
   name: string
   email: string
@@ -89,7 +105,9 @@ const columns = ref<DataTableColumns<account>>([
         NSwitch,
         {
           size: 'medium',
-          value: row.is_locked === 1 ? false : true
+          value: row.is_locked === 1 ? false : true,
+          rubberBand: false,
+          onClick: () => handleSwitch(row)
         },
         {
           checked: () => '启用',
@@ -123,13 +141,19 @@ onMounted(() => {
 async function loadAccountList(pramas: AccPrarms) {
   if (loading.value) return
 
-  loading.value = true
-  const res = await getAccounts(pramas)
-  loading.value = false
-  if (!res) return
+  try {
+    loading.value = true
+    const res = await getAccounts(pramas)
+    loading.value = false
 
-  accountList.value = res.data.data
-  totalPage.value = res.data.meta.pagination.total_pages
+    if (res.data) {
+      accountList.value = res.data.data
+      totalPage.value = res.data.meta.pagination.total_pages
+    }
+  } catch (error) {
+    console.log(error)
+    loading.value = false
+  }
 }
 
 function handlePageChange(page: number) {
@@ -144,6 +168,7 @@ function handlePageChange(page: number) {
 
 function handleOnSreach() {
   if (loading.value || (nameQuery.value === '' && emailQuery.value === '')) return
+
   let accPramas: AccPrarms = { current: 1 }
   if (nameQuery.value !== '') {
     accPramas.name = nameQuery.value
@@ -155,8 +180,31 @@ function handleOnSreach() {
 
 function handleOnReset() {
   if (loading.value || (nameQuery.value === '' && emailQuery.value === '')) return
+
   nameQuery.value = ''
   emailQuery.value = ''
   loadAccountList({ current: 1 })
+}
+
+function handleOnCreate() {
+  showCreateModal.value = true
+}
+
+async function handleSwitch(row: account) {
+  if (!row) return
+
+  try {
+    const res = await updateAccountStatus(row.id)
+
+    if (!res || res.status !== 204) return
+
+    const item = accountList.value.find((item) => item.id === row.id)
+    if (item) {
+      item.is_locked = item.is_locked === 0 ? 1 : 0
+      message.success(`${item.is_locked === 0 ? '启用' : '禁用'}成功`)
+    }
+  } catch (error) {
+    // todo
+  }
 }
 </script>
