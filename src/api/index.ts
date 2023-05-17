@@ -25,6 +25,9 @@ instance.interceptors.response.use(
   (err) => {
     const { response } = err
     switch (response?.status) {
+      case 400:
+        window.$message.error(response.data?.message || '出错了，请重试')
+        break
       case 401:
         window.$message.error('登录失败，请检查用户名和密码是否正确')
         break

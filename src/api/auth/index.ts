@@ -1,6 +1,6 @@
 import http from '../index'
 
-export interface LoginParams {
+export type LoginParams = {
   email: string
   password: string
 }

@@ -54,15 +54,20 @@
     </div>
     <CreateAccount
       v-model:show="showCreateModal"
-      @reload-account-list="loadAccountList"></CreateAccount>
+      @reload-account-list="handleOnReload"></CreateAccount>
+    <UpdateAccount
+      v-model:show="showUpdateModal"
+      :id="currentUpdateId"
+      @reload-account-list="handleOnReload"></UpdateAccount>
   </main>
 </template>
 
 <script setup lang="ts">
 import HeaderNav from '@/components/HeaderNav/index.vue'
 import CreateAccount from './components/CreateAccount.vue'
+import UpdateAccount from './components/UpdateAccount.vue'
 import { inputOverrides, buttonOverrides, pageOverrides } from '@/utils/themeOverrides'
-import { getAccounts, type AccPrarms, updateAccountStatus } from '@/api/accounts'
+import { getAccounts, type AccountsPrarms, updateAccountStatus } from '@/api/accounts'
 import { NAvatar, NButton, NIcon, NSwitch, type DataTableColumns, useMessage } from 'naive-ui'
 import { PlusOutlined } from '@vicons/material'
 import { ref, h, type Component, onMounted } from 'vue'
@@ -75,7 +80,10 @@ function renderIcon(icon: Component) {
 const page = ref(1)
 const totalPage = ref(1)
 const loading = ref(false)
+const isSearch = ref(false)
 const showCreateModal = ref(false)
+const showUpdateModal = ref(false)
+const currentUpdateId = ref(0)
 const nameQuery = ref('')
 const emailQuery = ref('')
 const accountList = ref<account[]>([])
@@ -120,13 +128,14 @@ const columns = ref<DataTableColumns<account>>([
   {
     title: '操作',
     key: 'option',
-    render() {
+    render(row) {
       return h(
         NButton,
         {
           size: 'small',
           type: 'info',
-          strong: true
+          strong: true,
+          onClick: () => handleUpdate(row)
         },
         { default: () => '编辑' }
       )
@@ -138,8 +147,13 @@ onMounted(() => {
   loadAccountList({ current: page.value })
 })
 
-async function loadAccountList(pramas: AccPrarms) {
+async function loadAccountList(pramas: AccountsPrarms) {
   if (loading.value) return
+  if (pramas.email !== undefined || pramas.name !== undefined) {
+    isSearch.value = true
+  } else {
+    isSearch.value = false
+  }
 
   try {
     loading.value = true
@@ -148,6 +162,7 @@ async function loadAccountList(pramas: AccPrarms) {
 
     if (res.data) {
       accountList.value = res.data.data
+      page.value = res.data.meta.pagination.current_page
       totalPage.value = res.data.meta.pagination.total_pages
     }
   } catch (error) {
@@ -157,7 +172,7 @@ async function loadAccountList(pramas: AccPrarms) {
 }
 
 function handlePageChange(page: number) {
-  let accPramas: AccPrarms = { current: page }
+  let accPramas: AccountsPrarms = { current: page }
   if (nameQuery.value !== '') {
     accPramas.name = nameQuery.value
   } else if (emailQuery.value !== '') {
@@ -169,7 +184,7 @@ function handlePageChange(page: number) {
 function handleOnSreach() {
   if (loading.value || (nameQuery.value === '' && emailQuery.value === '')) return
 
-  let accPramas: AccPrarms = { current: 1 }
+  let accPramas: AccountsPrarms = { current: 1 }
   if (nameQuery.value !== '') {
     accPramas.name = nameQuery.value
   } else if (emailQuery.value !== '') {
@@ -179,7 +194,8 @@ function handleOnSreach() {
 }
 
 function handleOnReset() {
-  if (loading.value || (nameQuery.value === '' && emailQuery.value === '')) return
+  if (!isSearch.value && (loading.value || (nameQuery.value === '' && emailQuery.value === '')))
+    return
 
   nameQuery.value = ''
   emailQuery.value = ''
@@ -205,6 +221,19 @@ async function handleSwitch(row: account) {
     }
   } catch (error) {
     // todo
+  }
+}
+
+function handleUpdate(row: account) {
+  currentUpdateId.value = row.id
+  showUpdateModal.value = true
+}
+
+function handleOnReload() {
+  if (nameQuery.value !== '' || emailQuery.value !== '') {
+    handleOnSreach()
+  } else {
+    loadAccountList({ current: 1 })
   }
 }
 </script>
