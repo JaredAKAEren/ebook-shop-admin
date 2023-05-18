@@ -7,6 +7,7 @@
     :positive-button-props="{ type: 'info' }"
     :negative-button-props="{ type: 'info' }"
     :show-icon="false"
+    :mask-closable="false"
     transform-origin="center"
     @positive-click="handleOnConfirm">
     <NForm class="p-4" ref="formRef" :model="accountInfo" :rules="rules">

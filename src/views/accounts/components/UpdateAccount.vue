@@ -7,6 +7,7 @@
     :positive-button-props="{ type: 'info', disabled }"
     :negative-button-props="{ type: 'info' }"
     :show-icon="false"
+    :mask-closable="false"
     transform-origin="center"
     @after-enter="loadAccountInfo(id)"
     @after-leave="resetAccountInfo"

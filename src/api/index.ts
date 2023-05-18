@@ -7,7 +7,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
-    const token: string = localStorage.getItem('token') || ''
+    const token: string = localStorage.getItem('token') ?? ''
     if (token !== '') {
       config.headers['Authorization'] = `Bearer ${token}`
     }
@@ -26,18 +26,18 @@ instance.interceptors.response.use(
     const { response } = err
     switch (response?.status) {
       case 400:
-        window.$message.error(response.data?.message || '出错了，请重试')
+        window.$message.error(response.data?.message ?? '出错了，请重试')
         break
       case 401:
-        window.$message.error('登录失败，请检查用户名和密码是否正确')
+        window.$message.error('登录失败，请重试')
         break
       case 404:
         window.$message.error('资源不存在')
         break
       case 422:
-        let message: string =
-          response.data.errors[Object.keys(response.data.errors)[0]][0] || '出错了，请重试'
-        window.$message.error(message)
+        window.$message.error(
+          response.data.errors[Object.keys(response.data.errors)[0]][0] ?? '出错了，请重试'
+        )
         break
       default:
         break

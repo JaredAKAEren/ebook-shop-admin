@@ -173,29 +173,23 @@ async function loadAccountList(pramas: AccountsPrarms) {
 
 function handlePageChange(page: number) {
   let accPramas: AccountsPrarms = { current: page }
-  if (nameQuery.value !== '') {
-    accPramas.name = nameQuery.value
-  } else if (emailQuery.value !== '') {
-    accPramas.email = emailQuery.value
-  }
+  !nameQuery.value || (accPramas.name = nameQuery.value)
+  !emailQuery.value || (accPramas.email = emailQuery.value)
   loadAccountList(accPramas)
 }
 
 function handleOnSreach() {
   if (loading.value || (nameQuery.value === '' && emailQuery.value === '')) return
-
   let accPramas: AccountsPrarms = { current: 1 }
-  if (nameQuery.value !== '') {
-    accPramas.name = nameQuery.value
-  } else if (emailQuery.value !== '') {
-    accPramas.email = emailQuery.value
-  }
+  !nameQuery.value || (accPramas.name = nameQuery.value)
+  !emailQuery.value || (accPramas.email = emailQuery.value)
   loadAccountList(accPramas)
 }
 
 function handleOnReset() {
-  if (!isSearch.value && (loading.value || (nameQuery.value === '' && emailQuery.value === '')))
+  if (!isSearch.value && (loading.value || (nameQuery.value === '' && emailQuery.value === ''))) {
     return
+  }
 
   nameQuery.value = ''
   emailQuery.value = ''
@@ -211,9 +205,7 @@ async function handleSwitch(row: account) {
 
   try {
     const res = await updateAccountStatus(row.id)
-
     if (!res || res.status !== 204) return
-
     const item = accountList.value.find((item) => item.id === row.id)
     if (item) {
       item.is_locked = item.is_locked === 0 ? 1 : 0

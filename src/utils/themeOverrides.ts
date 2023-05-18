@@ -4,7 +4,9 @@ type InputThemeOverrides = NonNullable<InputProps['themeOverrides']>
 const inputOverrides: InputThemeOverrides = {
   borderHover: '1px solid #4098fc',
   borderFocus: '1px solid #4098fc',
-  boxShadowFocus: '0 0 0 2px #4098fc33'
+  boxShadowFocus: '0 0 0 2px #4098fc33',
+  caretColor: '#2080f0',
+  loadingColor: '#2080f0'
 }
 
 type PageThemeOverrides = NonNullable<PaginationProps['themeOverrides']>
