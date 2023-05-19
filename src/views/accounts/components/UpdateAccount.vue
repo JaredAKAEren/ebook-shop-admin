@@ -9,9 +9,9 @@
     :show-icon="false"
     :mask-closable="false"
     transform-origin="center"
-    @after-enter="loadAccountInfo(id)"
-    @after-leave="resetAccountInfo"
-    @positive-click="handleOnConfirm">
+    @after-enter="load(id)"
+    @after-leave="reset"
+    @positive-click="confirm">
     <NForm class="p-4" ref="formRef" :model="accountInfo" :rules="rules">
       <NFormItem path="name" label="昵称">
         <NInput
@@ -60,34 +60,30 @@ const rules: FormRules = {
   ]
 }
 
-async function loadAccountInfo(id: number) {
+const load = async function loadAccountInfo(id: number) {
   try {
     loading.value = true
     const res = await getAccountInfo(id)
     loading.value = false
     disabled.value = false
 
-    if (res.data && res.status === 200) {
+    if (res?.status === 200) {
       accountInfo.value.name = res.data.name
       accountInfo.value.email = res.data.email
     }
   } catch (error) {
-    // todo
     loading.value = false
   }
 }
 
-async function handleOnConfirm() {
+const confirm = async function handleOnConfirmClick() {
   await formRef.value?.validate((error) => {
     if (error) return
   })
 
   try {
     const res = await updateAccountInfo(props.id, accountInfo.value)
-
-    if (res && res.status === 204) {
-      message.success('更新成功')
-    }
+    if (res?.status === 204) message.success('更新成功')
   } catch (error) {
     return false
   }
@@ -95,7 +91,7 @@ async function handleOnConfirm() {
   emits('reloadAccountList')
 }
 
-function resetAccountInfo() {
+const reset = function handleOnResetAccountInfoAndStatus() {
   accountInfo.value.name = ''
   accountInfo.value.email = ''
   loading.value = false

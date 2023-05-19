@@ -9,7 +9,7 @@
     :show-icon="false"
     :mask-closable="false"
     transform-origin="center"
-    @positive-click="handleOnConfirm">
+    @positive-click="confirm">
     <NForm class="p-4" ref="formRef" :model="accountInfo" :rules="rules">
       <NFormItem path="name" label="昵称">
         <NInput
@@ -44,6 +44,8 @@ import { inputOverrides } from '@/utils/themeOverrides'
 import { useMessage, type FormInst, type FormRules } from 'naive-ui'
 import { ref } from 'vue'
 
+const emits = defineEmits(['reloadAccountList'])
+
 const message = useMessage()
 
 const formRef = ref<FormInst | null>(null)
@@ -57,19 +59,14 @@ const rules: FormRules = {
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 }
 
-const emits = defineEmits(['reloadAccountList'])
-
-async function handleOnConfirm() {
+const confirm = async function handleOnConfirmClick() {
   await formRef.value?.validate((error) => {
     if (error) return
   })
 
   try {
     const res = await createAccount(accountInfo.value)
-
-    if (res && res.status === 201) {
-      message.success('创建成功')
-    }
+    if (res?.status === 201) message.success('创建成功')
   } catch (error) {
     return false
   }

@@ -21,10 +21,8 @@
           </NFormItem>
         </NForm>
         <div class="flex">
-          <NButton class="mr-4" :theme-overrides="buttonOverrides" @click="handleOnReset">
-            重置
-          </NButton>
-          <NButton type="info" @click="handleOnSreach">搜索</NButton>
+          <NButton class="mr-4" :theme-overrides="buttonOverrides" @click="reset">重置</NButton>
+          <NButton type="info" @click="search">搜索</NButton>
         </div>
       </header>
       <NDivider style="margin: 0.875rem 0"></NDivider>
@@ -32,7 +30,7 @@
       <div class="flex flex-col flex-1">
         <header class="flex justify-between items-center mb-2 px-4">
           <h3 class="text-xl">用户列表</h3>
-          <NButton type="info" :render-icon="renderIcon(PlusOutlined)" @click="handleOnCreate">
+          <NButton type="info" :render-icon="renderIcon(PlusOutlined)" @click="create">
             新建
           </NButton>
         </header>
@@ -47,18 +45,16 @@
         <NPagination
           class="mt-2 justify-center"
           v-model:page="page"
-          @update:page="handlePageChange"
+          @update:page="pageChange"
           :page-count="totalPage"
           :theme-overrides="pageOverrides"></NPagination>
       </div>
     </div>
-    <CreateAccount
-      v-model:show="showCreateModal"
-      @reload-account-list="handleOnReload"></CreateAccount>
+    <CreateAccount v-model:show="showCreateModal" @reload-account-list="reload"></CreateAccount>
     <UpdateAccount
       v-model:show="showUpdateModal"
       :id="currentUpdateId"
-      @reload-account-list="handleOnReload"></UpdateAccount>
+      @reload-account-list="reload"></UpdateAccount>
   </main>
 </template>
 
@@ -74,9 +70,11 @@ import { ref, h, type Component, onMounted } from 'vue'
 
 const message = useMessage()
 
-function renderIcon(icon: Component) {
+// TODO: 需要将此方法抽离为模块
+const renderIcon = (icon: Component) => {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
+
 const page = ref(1)
 const totalPage = ref(1)
 const loading = ref(false)
@@ -115,7 +113,7 @@ const columns = ref<DataTableColumns<account>>([
           size: 'medium',
           value: row.is_locked === 1 ? false : true,
           rubberBand: false,
-          onClick: () => handleSwitch(row)
+          onClick: () => switchChange(row)
         },
         {
           checked: () => '启用',
@@ -135,7 +133,7 @@ const columns = ref<DataTableColumns<account>>([
           size: 'small',
           type: 'info',
           strong: true,
-          onClick: () => handleUpdate(row)
+          onClick: () => update(row)
         },
         { default: () => '编辑' }
       )
@@ -144,63 +142,57 @@ const columns = ref<DataTableColumns<account>>([
 ])
 
 onMounted(() => {
-  loadAccountList({ current: page.value })
+  load({ current: page.value })
 })
 
-async function loadAccountList(pramas: AccountsPrarms) {
+const load = async function loadAccountList(pramas: AccountsPrarms) {
   if (loading.value) return
-  if (pramas.email !== undefined || pramas.name !== undefined) {
-    isSearch.value = true
-  } else {
-    isSearch.value = false
-  }
+  // 统一处理 isSearch 的状态
+  !nameQuery.value || (pramas.name = nameQuery.value)
+  !emailQuery.value || (pramas.email = emailQuery.value)
+  isSearch.value = pramas.email !== undefined || pramas.name !== undefined ? true : false
 
   try {
     loading.value = true
     const res = await getAccounts(pramas)
     loading.value = false
 
-    if (res.data) {
+    // 内部的赋值语句不做空处理，因为在 try catch 块内
+    // 期望它们能够抛出异常，这样可以终止赋值，交由 catch 块处理
+    if (res?.status === 200) {
       accountList.value = res.data.data
       page.value = res.data.meta.pagination.current_page
       totalPage.value = res.data.meta.pagination.total_pages
     }
   } catch (error) {
-    console.log(error)
     loading.value = false
   }
 }
 
-function handlePageChange(page: number) {
-  let accPramas: AccountsPrarms = { current: page }
-  !nameQuery.value || (accPramas.name = nameQuery.value)
-  !emailQuery.value || (accPramas.email = emailQuery.value)
-  loadAccountList(accPramas)
+const pageChange = function handleOnPageChange(page: number) {
+  load({ current: page })
 }
 
-function handleOnSreach() {
+const search = function handleOnSearchClick() {
   if (loading.value || (nameQuery.value === '' && emailQuery.value === '')) return
-  let accPramas: AccountsPrarms = { current: 1 }
-  !nameQuery.value || (accPramas.name = nameQuery.value)
-  !emailQuery.value || (accPramas.email = emailQuery.value)
-  loadAccountList(accPramas)
+  load({ current: 1 })
 }
 
-function handleOnReset() {
+const reset = function handleOnResetClick() {
   if (!isSearch.value && (loading.value || (nameQuery.value === '' && emailQuery.value === ''))) {
     return
   }
 
   nameQuery.value = ''
   emailQuery.value = ''
-  loadAccountList({ current: 1 })
+  load({ current: 1 })
 }
 
-function handleOnCreate() {
+const create = function handleOnCreateClick() {
   showCreateModal.value = true
 }
 
-async function handleSwitch(row: account) {
+const switchChange = async function handleOnSwitchChange(row: account) {
   if (!row) return
 
   try {
@@ -216,16 +208,16 @@ async function handleSwitch(row: account) {
   }
 }
 
-function handleUpdate(row: account) {
+const update = function handleOnUpdateClick(row: account) {
   currentUpdateId.value = row.id
   showUpdateModal.value = true
 }
 
-function handleOnReload() {
+const reload = function handleOnReloadData() {
   if (nameQuery.value !== '' || emailQuery.value !== '') {
-    handleOnSreach()
+    search()
   } else {
-    loadAccountList({ current: 1 })
+    load({ current: 1 })
   }
 }
 </script>
