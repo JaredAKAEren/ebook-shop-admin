@@ -57,13 +57,12 @@ if (window.$message === undefined) {
 const formRef = ref<FormInst | null>(null)
 const loginInfo = ref<LoginParams>({ email: 'super@a.com', password: '123123' })
 const loading = ref<boolean>(false)
-
 const rules: FormRules = {
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 }
 
-async function toLogin() {
+const toLogin = async function handleOnLoginClick() {
   await formRef.value?.validate((error) => {
     if (error) return
   })
@@ -73,11 +72,11 @@ async function toLogin() {
     const res = await login(loginInfo.value)
     loading.value = false
 
-    if (res.data) {
+    if (res?.data) {
       userStore.setToken(res.data.access_token)
-      let path: string = route.query.redirect as string
+      const path: string = route.query?.redirect as string
       router.replace({
-        path: path === '/' || path === undefined || path === null ? '/dashboard/console' : path
+        path: path ?? '/dashboard/console'
       })
       message.success('登录成功')
     }
