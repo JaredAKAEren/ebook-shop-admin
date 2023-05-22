@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
         title: '订单管理',
         requireAuth: true
       },
-      component: () => import('@/views/orders/index.vue')
+      component: () => import('@/views/orders/OrderView.vue')
     }
   ]
 }

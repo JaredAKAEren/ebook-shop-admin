@@ -2,6 +2,10 @@ import { defineStore } from 'pinia'
 import { computed } from 'vue'
 import { ref } from 'vue'
 import { getNowUserInfo } from '@/api/auth'
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 export const useUserStore = defineStore('user', () => {
   const token = ref(localStorage.getItem('token') || '')
@@ -30,11 +34,18 @@ export const useUserStore = defineStore('user', () => {
 
   async function fetchUserInfo() {
     if (!userInfo.value) return
-    const res = await getNowUserInfo()
-    if (res.data) {
-      setUsername(res.data.name)
-      setAavatar(res.data.avatar_url)
-      setUserInfo(res.data)
+
+    try {
+      const res = await getNowUserInfo()
+      if (res?.data) {
+        setUsername(res.data.name)
+        setAavatar(res.data.avatar_url)
+        setUserInfo(res.data)
+      }
+    } catch (error) {
+      setToken('')
+      localStorage.removeItem('token')
+      router.push('/login')
     }
   }
 

@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
         title: '评论管理',
         requireAuth: true
       },
-      component: () => import('@/views/comments/index.vue')
+      component: () => import('@/views/comments/CommentsView.vue')
     }
   ]
 }

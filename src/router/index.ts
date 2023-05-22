@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import LoginView from '../views/login/index.vue'
+import LoginView from '../views/login/LoginView.vue'
 
 import dashboardRoutes from './modules/dashboard'
 import accountRoutes from './modules/accounts'

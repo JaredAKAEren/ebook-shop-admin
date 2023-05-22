@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
         title: '分类管理',
         requireAuth: true
       },
-      component: () => import('@/views/categories/index.vue')
+      component: () => import('@/views/categories/CategoriesView.vue')
     }
   ]
 }

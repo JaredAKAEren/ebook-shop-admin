@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
         title: '轮播管理',
         requireAuth: true
       },
-      component: () => import('@/views/carousels/index.vue')
+      component: () => import('@/views/carousels/CarouselsView.vue')
     }
   ]
 }

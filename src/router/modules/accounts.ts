@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
         title: '账户管理',
         requireAuth: true
       },
-      component: () => import('@/views/accounts/index.vue')
+      component: () => import('@/views/accounts/AccountsView.vue')
     }
   ]
 }

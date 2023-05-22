@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
         title: '图书管理',
         requireAuth: true
       },
-      component: () => import('@/views/books/index.vue')
+      component: () => import('@/views/books/BooksView.vue')
     }
   ]
 }

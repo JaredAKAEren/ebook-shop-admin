@@ -1,0 +1,1 @@
+import{_ as s,P as c,Q as t,F as a,X as e}from"./index-41a85a15.js";const n={},o=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1),r=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1),_=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1);function d(i,l){return c(),t(a,null,[o,r,_],64)}const f=s(n,[["render",d]]);export{f as default};

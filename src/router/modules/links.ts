@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
         title: '链接管理',
         requireAuth: true
       },
-      component: () => import('@/views/links/index.vue')
+      component: () => import('@/views/links/LinksView.vue')
     }
   ]
 }

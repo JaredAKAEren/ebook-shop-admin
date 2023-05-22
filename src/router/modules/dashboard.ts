@@ -19,7 +19,7 @@ const routes: RouteRecordRaw = {
         title: '首页统计',
         requireAuth: true
       },
-      component: () => import('@/views/dashboard/index.vue')
+      component: () => import('@/views/dashboard/DashboardView.vue')
     }
   ]
 }
