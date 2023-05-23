@@ -1,5 +1,5 @@
 <template>
-  <main class="p-2 bg-gray-100 h-full flex flex-col">
+  <main class="p-2 bg-gray-100 h-full flex flex-col box-border">
     <HeaderNav title="用户管理"></HeaderNav>
     <div class="bg-white p-2 mt-2 rounded flex flex-col flex-1">
       <!-- 头部功能区域 -->

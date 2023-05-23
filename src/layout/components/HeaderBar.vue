@@ -8,6 +8,7 @@
 </template>
 
 <script setup lang="ts">
+import { postLogout } from '@/api/auth'
 import { useUserStore } from '@/stores/user'
 import { useDialog, useMessage } from 'naive-ui'
 import { onMounted } from 'vue'
@@ -19,10 +20,21 @@ const dialog = useDialog()
 const message = useMessage()
 
 onMounted(() => {
-  userStore.fetchUserInfo()
+  userInfo()
 })
 
-function toLogout() {
+const userInfo = async function loadUserInfo() {
+  try {
+    await userStore.fetchUserInfo()
+  } catch (error) {
+    console.log(error)
+    localStorage.removeItem('token')
+    userStore.setToken('')
+    router.push('/login')
+  }
+}
+
+const toLogout = function handleOnLogoutClick() {
   dialog.warning({
     title: '警告',
     content: '你确定要登出吗？',
@@ -40,9 +52,17 @@ function toLogout() {
   })
 }
 
-function logout() {
-  localStorage.removeItem('token')
-  router.push('/login')
-  message.success('已退出登录')
+const logout = async function logout() {
+  try {
+    const res = await postLogout()
+    if (res?.status === 204) {
+      localStorage.removeItem('token')
+      userStore.setToken('')
+      message.success('已退出登录')
+      router.push('/login')
+    }
+  } catch {
+    // todo
+  }
 }
 </script>

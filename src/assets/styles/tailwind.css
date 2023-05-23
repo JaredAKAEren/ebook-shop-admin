@@ -9,4 +9,10 @@
   [type='submit'] {
     background-color: var(--n-color);
   }
+
+  *,
+  ::before,
+  ::after {
+    box-sizing: content-box;
+  }
 }

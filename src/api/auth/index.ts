@@ -13,6 +13,6 @@ export function getNowUserInfo() {
   return http.get('/admin/user')
 }
 
-export function logout() {
+export function postLogout() {
   return http.post('/auth/logout')
 }
