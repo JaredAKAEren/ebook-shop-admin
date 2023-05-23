@@ -12,6 +12,7 @@
           :columns="columns"
           :data="carouselList"
           :loading="loading"
+          :theme-overrides="dataTableOverriders"
           flex-height></NDataTable>
       </div>
       <NPagination
@@ -29,7 +30,7 @@ import HeaderNav from '@/components/HeaderNav/index.vue'
 import CreateCarousel from './components/CreateCarousel.vue'
 import { getCarousels } from '@/api/carousels'
 import { renderIcon } from '@/utils/naiveuiUtils'
-import { pageOverrides } from '@/utils/themeOverrides'
+import { pageOverrides, switchOverrides, dataTableOverriders } from '@/utils/themeOverrides'
 import { PlusOutlined } from '@vicons/material'
 import { NSwitch, type DataTableColumns, NButton, NImage } from 'naive-ui'
 import { onMounted, ref, h } from 'vue'
@@ -82,7 +83,8 @@ const columns = ref<DataTableColumns<carousel>>([
           rubberBand: false,
           checkedValue: 1,
           uncheckedValue: 0,
-          value: row.status
+          value: row.status,
+          themeOverrides: switchOverrides
         },
         {
           checked: () => '启用',

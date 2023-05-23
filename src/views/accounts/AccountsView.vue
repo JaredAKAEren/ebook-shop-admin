@@ -40,6 +40,7 @@
             :columns="columns"
             :data="accountList"
             :loading="loading"
+            :theme-overrides="dataTableOverriders"
             flex-height></NDataTable>
         </div>
         <NPagination
@@ -62,18 +63,20 @@
 import HeaderNav from '@/components/HeaderNav/index.vue'
 import CreateAccount from './components/CreateAccount.vue'
 import UpdateAccount from './components/UpdateAccount.vue'
-import { inputOverrides, buttonOverrides, pageOverrides } from '@/utils/themeOverrides'
+import {
+  inputOverrides,
+  buttonOverrides,
+  pageOverrides,
+  switchOverrides,
+  dataTableOverriders
+} from '@/utils/themeOverrides'
+import { renderIcon } from '@/utils/naiveuiUtils'
 import { getAccounts, type AccountsPrarms, updateAccountStatus } from '@/api/accounts'
-import { NAvatar, NButton, NIcon, NSwitch, type DataTableColumns, useMessage } from 'naive-ui'
+import { NAvatar, NButton, NSwitch, type DataTableColumns, useMessage } from 'naive-ui'
 import { PlusOutlined } from '@vicons/material'
-import { ref, h, type Component, onMounted } from 'vue'
+import { ref, h, onMounted } from 'vue'
 
 const message = useMessage()
-
-// TODO: 需要将此方法抽离为模块
-const renderIcon = (icon: Component) => {
-  return () => h(NIcon, null, { default: () => h(icon) })
-}
 
 const page = ref(1)
 const totalPage = ref(1)
@@ -113,6 +116,7 @@ const columns = ref<DataTableColumns<account>>([
           size: 'medium',
           value: row.is_locked === 1 ? false : true,
           rubberBand: false,
+          themeOverrides: switchOverrides,
           onClick: () => switchChange(row)
         },
         {
@@ -133,6 +137,7 @@ const columns = ref<DataTableColumns<account>>([
           size: 'small',
           type: 'info',
           strong: true,
+          dashed: true,
           onClick: () => update(row)
         },
         { default: () => '编辑' }

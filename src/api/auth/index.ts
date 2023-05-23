@@ -16,3 +16,7 @@ export function getNowUserInfo() {
 export function postLogout() {
   return http.post('/auth/logout')
 }
+
+export const getOSSToken = () => {
+  return http.get('/auth/oss/token')
+}

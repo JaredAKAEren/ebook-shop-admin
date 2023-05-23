@@ -1,4 +1,12 @@
-import type { ButtonProps, InputProps, MenuProps, PaginationProps } from 'naive-ui'
+import type {
+  ButtonProps,
+  DataTableProps,
+  InputProps,
+  MenuProps,
+  PaginationProps,
+  SwitchProps,
+  UploadProps
+} from 'naive-ui'
 
 type InputThemeOverrides = NonNullable<InputProps['themeOverrides']>
 const inputOverrides: InputThemeOverrides = {
@@ -48,4 +56,30 @@ const menuOverrides: MenuThemeOverrides = {
   itemColorActiveCollapsed: '#2080f020'
 }
 
-export { inputOverrides, pageOverrides, buttonOverrides, menuOverrides }
+type UploadThemeOverrides = NonNullable<UploadProps['themeOverrides']>
+const uploadOverrides: UploadThemeOverrides = {
+  draggerBorderHover: '1px dashed #2080f0'
+}
+
+type SwitchThemeOverrides = NonNullable<SwitchProps['themeOverrides']>
+const switchOverrides: SwitchThemeOverrides = {
+  railColorActive: '#2080f0',
+  loadingColor: '#2080f0',
+  boxShadowFocus: '0 0 0 2px #2080f033'
+}
+
+type DataTableThemeOverrides = NonNullable<DataTableProps['themeOverrides']>
+const dataTableOverriders: DataTableThemeOverrides = {
+  thIconColorActive: '#2080f0',
+  loadingColor: '#2080f0'
+}
+
+export {
+  inputOverrides,
+  pageOverrides,
+  buttonOverrides,
+  menuOverrides,
+  uploadOverrides,
+  switchOverrides,
+  dataTableOverriders
+}
