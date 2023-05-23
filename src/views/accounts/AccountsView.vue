@@ -202,7 +202,7 @@ const switchChange = async function handleOnSwitchChange(row: account) {
 
   try {
     const res = await updateAccountStatus(row.id)
-    if (!res || res.status !== 204) return
+    if (res?.status !== 204) return
     const item = accountList.value.find((item) => item.id === row.id)
     if (item) {
       item.is_locked = item.is_locked === 0 ? 1 : 0
