@@ -27,9 +27,7 @@ const userInfo = async function loadUserInfo() {
   try {
     await userStore.fetchUserInfo()
   } catch (error) {
-    console.log(error)
-    localStorage.removeItem('token')
-    userStore.setToken('')
+    userStore.resetStates()
     router.push('/login')
   }
 }
@@ -56,8 +54,7 @@ const logout = async function logout() {
   try {
     const res = await postLogout()
     if (res?.status === 204) {
-      localStorage.removeItem('token')
-      userStore.setToken('')
+      userStore.resetStates()
       message.success('已退出登录')
       router.push('/login')
     }

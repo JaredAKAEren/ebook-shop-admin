@@ -27,7 +27,7 @@
               show-password-on="mousedown"
               clearable></NInput>
           </NFormItem>
-          <NButton class="my-4" @click="toLogin" :loading="loading" block type="info">
+          <NButton class="my-4 box-border" @click="toLogin" :loading="loading" block type="info">
             <span class="tracking-widest">登录</span>
           </NButton>
         </NForm>

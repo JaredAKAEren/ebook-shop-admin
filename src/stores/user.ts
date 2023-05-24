@@ -7,7 +7,7 @@ export const useUserStore = defineStore('user', () => {
   const token = ref(localStorage.getItem('token') || '')
   const username = ref('')
   const avatar = ref('')
-  const userInfo = ref({})
+  const userInfo = ref<object | null>(null)
 
   const getToken = computed(() => token.value)
   const getUsername = computed(() => username.value)
@@ -29,7 +29,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function fetchUserInfo() {
-    if (!userInfo.value) return
+    if (userInfo.value !== null) return
 
     const res = await getNowUserInfo()
     if (res?.data) {
@@ -38,6 +38,14 @@ export const useUserStore = defineStore('user', () => {
       setUserInfo(res.data)
     }
     return res
+  }
+
+  function resetStates() {
+    localStorage.removeItem('token')
+    token.value = ''
+    username.value = ''
+    avatar.value = ''
+    userInfo.value = null
   }
 
   return {
@@ -53,6 +61,7 @@ export const useUserStore = defineStore('user', () => {
     setUsername,
     setAavatar,
     setUserInfo,
-    fetchUserInfo
+    fetchUserInfo,
+    resetStates
   }
 })
