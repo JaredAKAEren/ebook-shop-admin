@@ -33,6 +33,7 @@ declare module '@vue/runtime-core' {
     NPagination: typeof import('naive-ui')['NPagination']
     NSwitch: typeof import('naive-ui')['NSwitch']
     NUpload: typeof import('naive-ui')['NUpload']
+    QuillEditor: typeof import('./src/components/QuillEditor/QuillEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

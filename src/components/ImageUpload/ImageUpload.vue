@@ -3,7 +3,10 @@
     list-type="image-card"
     :theme-overrides="uploadOverrides"
     :custom-request="upload"
-    @finish="finish"></NUpload>
+    :show-cancel-button="false"
+    :max="maxImage"
+    @finish="finish"
+    @remove="remove"></NUpload>
 </template>
 
 <script setup lang="ts">
@@ -13,6 +16,7 @@ import axios from 'axios'
 import { useMessage, type UploadCustomRequestOptions, type UploadFileInfo } from 'naive-ui'
 import { ref } from 'vue'
 
+defineProps<{ maxImage?: number }>()
 const emits = defineEmits(['afterUploadImage'])
 
 const message = useMessage()
@@ -26,6 +30,7 @@ const upload = async function handleImageUpload({
   onError,
   onProgress
 }: UploadCustomRequestOptions) {
+  onProgress({ percent: 20 })
   emits('afterUploadImage', 'uploading')
   try {
     const res = await getOSSToken()
@@ -46,12 +51,13 @@ const upload = async function handleImageUpload({
       headers: {
         'Content-Type': file.type
       },
-      onUploadProgress: ({ loaded, total }) => {
-        // FIXME: 无法计算上传进度，loaded 的值直接为 total 的值，也就是文件的大小
-        onProgress({ percent: Math.ceil((loaded * 100) / (total as number)) })
+      onUploadProgress: ({ progress }) => {
+        // FIXME: 一开始 progress 就为 100，图片大于 4MB 时首次的 progress 才会小于100
+        onProgress({ percent: Math.ceil((progress ?? 0.7) * 100) })
       }
     })
     if (resOSS?.status === 204) {
+      onProgress({ percent: 100 })
       fileName.value = formatName
       fileUrl.value = `${res.data.host}${formatName}`
       onFinish()
@@ -68,5 +74,9 @@ const finish = function handleOnFileUploadFinish({ file }: { file: UploadFileInf
   file.url = fileUrl.value
   emits('afterUploadImage', fileUrl.value)
   return file
+}
+
+const remove = function handleOnImageRemove() {
+  emits('afterUploadImage', '')
 }
 </script>

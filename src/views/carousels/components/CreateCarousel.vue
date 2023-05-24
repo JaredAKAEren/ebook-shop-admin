@@ -43,7 +43,7 @@
         </NSwitch>
       </NFormItem>
       <NFormItem path="img" label="上传图片">
-        <ImageUpload @after-upload-image="afterUpload"></ImageUpload>
+        <ImageUpload :max-image="1" @after-upload-image="afterUpload"></ImageUpload>
       </NFormItem>
     </NForm>
   </NModal>
