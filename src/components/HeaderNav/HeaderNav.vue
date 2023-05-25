@@ -1,6 +1,6 @@
 <template>
-  <header class="bg-white py-2 px-3 rounded">
-    <nav>
+  <header class="bg-white p-2 rounded">
+    <nav class="flex justify-between items-center">
       <NBreadcrumb separator=">">
         <NBreadcrumbItem :href="homeUrl">
           <span>控制台</span>
@@ -10,7 +10,6 @@
         </NBreadcrumbItem>
       </NBreadcrumb>
     </nav>
-    <h2 class="text-2xl pt-3 pb-2 px-1 tracking-wider">{{ title }}</h2>
   </header>
 </template>
 

@@ -1,6 +1,6 @@
 import http from '../index'
 
-export type AccountsPrarms = {
+export type AccountsParams = {
   current: number
   name?: string
   email?: string
@@ -17,7 +17,7 @@ export type UpdateAccountData = {
   email: string
 }
 
-export function getAccounts(params: AccountsPrarms) {
+export function getAccounts(params: AccountsParams) {
   return http.get('/admin/users', { params })
 }
 

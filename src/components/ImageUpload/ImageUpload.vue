@@ -65,6 +65,7 @@ const upload = async function handleImageUpload({
     }
   } catch (error) {
     onError()
+    emits('afterUploadImage', '')
     message.error('上传失败')
   }
 }

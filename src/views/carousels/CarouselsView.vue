@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import HeaderNav from '@/components/HeaderNav/index.vue'
+import HeaderNav from '@/components/HeaderNav/HeaderNav.vue'
 import CreateCarousel from './components/CreateCarousel.vue'
 import { deleteCarousel, getCarousels, updateCarouselStatus } from '@/api/carousels'
 import { renderIcon } from '@/utils/naiveuiUtils'

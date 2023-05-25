@@ -66,7 +66,7 @@ const rules: FormRules = {
   title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
   url: [
     { required: true, message: '请输入跳转链接', trigger: 'blur' },
-    { type: 'url', message: '请输入正确的链接地址', trigger: 'input' }
+    { type: 'url', message: '请输入正确的链接地址', trigger: ['input', 'blur'] }
   ],
   img: [{ required: true, message: '请上传图片' }]
 }

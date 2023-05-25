@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import HeaderNav from '@/components/HeaderNav/index.vue'
+import HeaderNav from '@/components/HeaderNav/HeaderNav.vue'
 import CreateAccount from './components/CreateAccount.vue'
 import UpdateAccount from './components/UpdateAccount.vue'
 import {
@@ -71,7 +71,7 @@ import {
   dataTableOverriders
 } from '@/utils/themeOverrides'
 import { renderIcon } from '@/utils/naiveuiUtils'
-import { getAccounts, type AccountsPrarms, updateAccountStatus } from '@/api/accounts'
+import { getAccounts, type AccountsParams, updateAccountStatus } from '@/api/accounts'
 import { NAvatar, NButton, NSwitch, type DataTableColumns, useMessage } from 'naive-ui'
 import { PlusOutlined } from '@vicons/material'
 import { ref, h, onMounted } from 'vue'
@@ -150,7 +150,7 @@ onMounted(() => {
   load({ current: page.value })
 })
 
-const load = async function loadAccountList(pramas: AccountsPrarms) {
+const load = async function loadAccountList(pramas: AccountsParams) {
   if (loading.value) return
   // 统一处理 isSearch 的状态
   !nameQuery.value || (pramas.name = nameQuery.value)
