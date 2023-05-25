@@ -6,12 +6,16 @@
       <header class="flex justify-between px-4">
         <NForm inline :show-feedback="false" label-placement="left">
           <NFormItem label="图书名称">
-            <NInput :theme-overrides="inputOverrides" placeholder="请输入名称" clearable></NInput>
+            <NInput
+              v-model:value="bookTitleQuery"
+              :theme-overrides="inputOverrides"
+              placeholder="请输入名称"
+              clearable></NInput>
           </NFormItem>
         </NForm>
         <div class="flex">
-          <NButton class="mr-4" :theme-overrides="buttonOverrides">重置</NButton>
-          <NButton type="info">搜索</NButton>
+          <NButton class="mr-4" :theme-overrides="buttonOverrides" @click="reset">重置</NButton>
+          <NButton type="info" @click="search">搜索</NButton>
         </div>
       </header>
       <NDivider style="margin: 0.875rem 0"></NDivider>
@@ -34,15 +38,18 @@
         <NPagination
           class="mt-2 justify-center"
           v-model:page="page"
+          @update:page="pageChange"
           :page-count="totalPage"
           :theme-overrides="pageOverrides"></NPagination>
       </div>
     </div>
+    <CreateBook v-model:show="showCreateModal" @reload-account-list="reload"></CreateBook>
   </main>
 </template>
 
 <script setup lang="ts">
 import HeaderNav from '@/components/HeaderNav/HeaderNav.vue'
+import CreateBook from './components/CreateBook.vue'
 import { getBooks, type bookParams } from '@/api/books'
 import { renderIcon } from '@/utils/naiveuiUtils'
 import { PlusOutlined } from '@vicons/material'
@@ -107,7 +114,7 @@ const columns = ref<DataTableColumns<book>>([
         },
         {
           checked: () => '已上架',
-          unchecked: () => '已下架'
+          unchecked: () => '未上架'
         }
       )
     }
@@ -157,7 +164,6 @@ onMounted(() => {
 
 const load = async function loadAccountList(pramas: bookParams) {
   if (loading.value) return
-  // 统一处理 isSearch 的状态
   !bookTitleQuery.value || (pramas.title = bookTitleQuery.value)
   isSearch.value = pramas.title !== undefined ? true : false
 
@@ -176,7 +182,33 @@ const load = async function loadAccountList(pramas: bookParams) {
   }
 }
 
+const pageChange = function handleOnPageChange(page: number) {
+  load({ current: page })
+}
+
+const search = function handleOnSearchClick() {
+  if (loading.value || bookTitleQuery.value === '') return
+  load({ current: 1 })
+}
+
+const reset = function handleOnResetClick() {
+  if (!isSearch.value && (loading.value || bookTitleQuery.value === '')) {
+    return
+  }
+
+  bookTitleQuery.value = ''
+  load({ current: 1 })
+}
+
 const create = function handleOnCreateClick() {
   showCreateModal.value = true
+}
+
+const reload = function handleOnReloadData() {
+  if (bookTitleQuery.value !== '') {
+    search()
+  } else {
+    load({ current: 1 })
+  }
 }
 </script>

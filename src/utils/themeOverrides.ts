@@ -1,6 +1,7 @@
 import type {
   ButtonProps,
   DataTableProps,
+  InputNumberProps,
   InputProps,
   MenuProps,
   PaginationProps,
@@ -15,6 +16,24 @@ const inputOverrides: InputThemeOverrides = {
   boxShadowFocus: '0 0 0 2px #4098fc33',
   caretColor: '#2080f0',
   loadingColor: '#2080f0'
+}
+
+type InputNumberThemeOverride = NonNullable<InputNumberProps['themeOverrides']>
+const inputNumberOverrides: InputNumberThemeOverride = {
+  peers: {
+    Button: {
+      textColorTextHover: '#4098fc',
+      textColorTextPressed: '#1060c9',
+      textColorTextFocus: '#4098fc'
+    },
+    Input: {
+      borderHover: '1px solid #4098fc',
+      borderFocus: '1px solid #4098fc',
+      boxShadowFocus: '0 0 0 2px #4098fc33',
+      caretColor: '#2080f0',
+      loadingColor: '#2080f0'
+    }
+  }
 }
 
 type PageThemeOverrides = NonNullable<PaginationProps['themeOverrides']>
@@ -76,6 +95,7 @@ const dataTableOverriders: DataTableThemeOverrides = {
 
 export {
   inputOverrides,
+  inputNumberOverrides,
   pageOverrides,
   buttonOverrides,
   menuOverrides,
