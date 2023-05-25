@@ -1,1 +1,0 @@
-import{_ as s,L as c,M as t,F as a,W as e}from"./index-150cb9dd.js";const n={},o=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1),r=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1),_=e("div",{class:"h-screen"},"控制台首页显示的一些数据统计",-1);function d(i,l){return c(),t(a,null,[o,r,_],64)}const f=s(n,[["render",d]]);export{f as default};
